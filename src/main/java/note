@@ -1,0 +1,22 @@
+COMPREHENSION TP
+
+MODEL : représentation des objets stockés dans les tables Client, Véhicle de la
+        base de données.
+
+DAO : data access layer and is responsible for direct interaction with the database.
+      It encapsulates CRUD operations for clients.
+
+SERVICE : contains business logic and coordinates interactions between the presentation (UI) layer and the data access layer.
+          It abstracts away the details of how data is accessed and provides a simplified interface for client-related operations.
+
+PERSISTENCE / driver manager : ConnectionManager manages database connections, while FillDatabase initializes and populates the database with sample data.
+
+IOUTILS : provides utility methods for input and output operations, particularly for reading user input from the standard input (keyboard)
+          and displaying messages to the standard output (console).
+
+SERVLET / CLI : defines a servlet named HomeServlet that handles HTTP GET requests for the URL pattern "/home".
+
+! dans la bdd penser à ajouter modèle dans Vehicle
+Rendu repo git
+voir Barème
+améliorer exception
