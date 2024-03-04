@@ -87,7 +87,7 @@ public class VehicleDao {
             ps.close();
             connection.close();
 
-            return null; // Return null if vehicle with given ID is not found
+            return null;
         } catch (SQLException e) {
             throw new DaoException("Error occurred in DAO while finding the vehicle by ID.");
         }

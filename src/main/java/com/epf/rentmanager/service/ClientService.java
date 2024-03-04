@@ -19,7 +19,6 @@ public class ClientService {
         if (instance == null) {
             instance = new ClientService();
         }
-
         return instance;
     }
 
@@ -34,7 +33,7 @@ public class ClientService {
         try {
             return clientDao.create(client);
         } catch (DaoException e) {
-            throw new RuntimeException(e);
+            throw new ServiceException("Error occurred in Service while creating a new client.");
         }
 
     }

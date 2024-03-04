@@ -19,20 +19,19 @@ public class VehicleService {
         if (instance == null) {
             instance = new VehicleService();
         }
-
         return instance;
     }
 
 
     public long create(Vehicle vehicle) throws ServiceException {
-        if (vehicle.getConstructeur().isEmpty() || vehicle.getNb_places() > 0) {
-            throw new ServiceException("Error occurred in Service while deleting the vehicle.");
+        if (vehicle.getConstructeur().isEmpty() || vehicle.getNb_places() < 0) {
+            throw new ServiceException("Error occurred in Service while creating the vehicle.");
         }
 
         try {
             return vehicleDao.create(vehicle);
         } catch (DaoException e) {
-            throw new ServiceException("Error occurred in Service while deleting the vehicle.");
+            throw new ServiceException("Error occurred in Service while creating the vehicle.");
         }
     }
 

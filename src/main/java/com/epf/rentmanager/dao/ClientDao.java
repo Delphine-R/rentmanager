@@ -89,7 +89,7 @@ public class ClientDao {
             ps.close();
             connection.close();
 
-            return null; // Return null if client with given ID is not found
+            return null;
         } catch (SQLException e) {
             throw new DaoException("Error occurred in DAO while finding the client by ID.");
         }
