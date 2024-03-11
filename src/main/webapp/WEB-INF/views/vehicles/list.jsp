@@ -15,7 +15,7 @@
         <section class="content-header">
             <h1>
                 Voitures
-                <a class="btn btn-primary" href="${pageContext.request.contextPath}/cars/create">Ajouter</a>
+                <a class="btn btn-primary" href="${pageContext.request.contextPath}/vehicles/create">Ajouter</a>
             </h1>
         </section>
 
@@ -40,8 +40,7 @@
                                     <td>${vehicle.id}.</td>
                                     <td>${vehicle.constructeur}</td>
                                     <td>${vehicle.modele}</td>
-                                    <td>${vehicle.seats}</td>
-                                    <!--<td>John Doe</td>-->
+                                    <td>${vehicle.nb_places}</td>
                                     <td>
                                         <a class="btn btn-primary disabled" href="car-detail.html">
                                             <i class="fa fa-play"></i>

@@ -47,7 +47,9 @@ public class CLIReservation {
     public void listReservations() {
         try {
             List<Reservation> reservations = reservationService.findAll();
-            displayReservations(reservations);
+            for (Reservation reservation : reservations) {
+                IOUtils.print(reservation.toString());
+            }
         } catch (ServiceException e) {
             IOUtils.print("Erreur lors de la récupération des réservations : " + e.getMessage());
         }
