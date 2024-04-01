@@ -6,11 +6,11 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
- <!-- Left side column. contains the logo and sidebar -->
-    <%@ include file="/WEB-INF/views/common/header.jsp" %>
+  <!-- Left side column. contains the logo and sidebar -->
+  <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
-   <!-- Left side column. contains the logo and sidebar -->
-    <%@ include file="/WEB-INF/views/common/sidebar.jsp" %>
+  <!-- Left side column. contains the logo and sidebar -->
+  <%@ include file="/WEB-INF/views/common/sidebar.jsp" %>
 
 
   <!-- Content Wrapper. Contains page content -->
@@ -45,7 +45,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Voitures</span>
-              <span class="info-box-number">2</span>
+              <span class="info-box-number">${vehicleCount}</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -75,15 +75,15 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
-   <jsp:include page='/WEB-INF/views/common/footer.jsp'></jsp:include>
+
+  <jsp:include page='/WEB-INF/views/common/footer.jsp'></jsp:include>
 
 
 </div>
 <!-- ./wrapper -->
 
-   <!-- Contains Js code imports -->
-   <%@ include file="/WEB-INF/views/common/js_imports.jsp" %>
+<!-- Contains Js code imports -->
+<%@ include file="/WEB-INF/views/common/js_imports.jsp" %>
 
 </body>
 </html>
