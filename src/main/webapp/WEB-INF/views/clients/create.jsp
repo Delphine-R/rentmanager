@@ -28,17 +28,17 @@
                         <form class="form-horizontal" method="post" action="${pageContext.request.contextPath}/clients/create">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="last_name" class="col-sm-2 control-label">Nom</label>
+                                    <label for="nom" class="col-sm-2 control-label">Nom</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Nom">
+                                        <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="first_name" class="col-sm-2 control-label">Prenom</label>
+                                    <label for="prenom" class="col-sm-2 control-label">Prenom</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Prenom">
+                                        <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prenom">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -46,6 +46,13 @@
 
                                     <div class="col-sm-10">
                                         <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="naissance" class="col-sm-2 control-label">Naissance</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="naissance" class="form-control" id="naissance" name="naissance" placeholder="Naissance">
                                     </div>
                                 </div>
                             </div>

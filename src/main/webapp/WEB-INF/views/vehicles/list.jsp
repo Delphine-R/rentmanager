@@ -31,7 +31,6 @@
                                     <th>Marque</th>
                                     <th>Modele</th>
                                     <th>Nombre de places</th>
-                                    <!--<th>Propriétaire</th>-->
                                     <th>Action</th>
                                 </tr>
                                 <tr>

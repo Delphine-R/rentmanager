@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet("/clients/create")
 public class ClientCreateServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,7 +31,7 @@ public class ClientCreateServlet extends HttpServlet {
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
         String email = request.getParameter("email");
-        //String naissance = request.getParameter("naissance");
+        LocalDate naissance = LocalDate.parse(request.getParameter("naissance"), formatter);
 
 
         // Create a new Client object
@@ -37,7 +39,7 @@ public class ClientCreateServlet extends HttpServlet {
         client.setNom(nom);
         client.setPrenom(prenom);
         client.setEmail(email);
-        //client.setNaissance(LocalDate.parse(naissance));
+        client.setNaissance(naissance);
 
         // Save the new client
         try {
