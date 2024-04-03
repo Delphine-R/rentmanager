@@ -60,4 +60,12 @@ public class ReservationService {
         }
     }
 
+    public int count() throws ServiceException {
+        try {
+            return reservationDao.count();
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in DAO while counting reservations.");
+        }
+    }
+
 }

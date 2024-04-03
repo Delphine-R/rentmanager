@@ -54,4 +54,12 @@ public class ClientService {
         }
     }
 
+    public int count() throws ServiceException {
+        try {
+            return clientDao.count();
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in DAO while counting clients.");
+        }
+    }
+
 }

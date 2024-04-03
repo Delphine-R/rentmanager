@@ -27,29 +27,31 @@
       <!-- Info boxes -->
       <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Utilisateurs</span>
-              <span class="info-box-number">3</span>
+          <a href="${pageContext.request.contextPath}/clients/list">
+            <div class="info-box">
+              <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Utilisateurs</span>
+                <span class="info-box-number">${clientCount}</span>
+              </div>
+              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
+            <!-- /.info-box -->
+          </a>
         </div>
         <!-- /.col -->
         <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-car"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Voitures</span>
-              <span class="info-box-number">${vehicleCount}</span>
+          <a href="${pageContext.request.contextPath}/vehicles/list">
+            <div class="info-box">
+              <span class="info-box-icon bg-red"><i class="fa fa-car"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Voitures</span>
+                <span class="info-box-number">${vehicleCount}</span>
+              </div>
+              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
+            <!-- /.info-box -->
+          </a>
         </div>
         <!-- /.col -->
 
@@ -57,16 +59,17 @@
         <div class="clearfix visible-sm-block"></div>
 
         <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="fa fa-pencil"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Reservations</span>
-              <span class="info-box-number">2</span>
+          <a href="${pageContext.request.contextPath}/reservations/list">
+            <div class="info-box">
+              <span class="info-box-icon bg-green"><i class="fa fa-pencil"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Reservations</span>
+                <span class="info-box-number">${reservationCount}</span>
+              </div>
+              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
+            <!-- /.info-box -->
+          </a>
         </div>
         <!-- /.col -->
       </div>
