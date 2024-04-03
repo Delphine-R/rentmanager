@@ -52,7 +52,8 @@
                                     <label for="naissance" class="col-sm-2 control-label">Naissance</label>
 
                                     <div class="col-sm-10">
-                                        <input type="naissance" class="form-control" id="naissance" name="naissance" placeholder="Naissance">
+                                        <input type="text" class="form-control" id="naissance" name="naissance" required
+                                               data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                                     </div>
                                 </div>
                             </div>
@@ -76,5 +77,13 @@
 <!-- ./wrapper -->
 
 <%@ include file="/WEB-INF/views/common/js_imports.jsp" %>
+<script src="${pageContext.request.contextPath}/resources/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script>
+    $(function () {
+        $('[data-mask]').inputmask();
+    });
+</script>
 </body>
 </html>

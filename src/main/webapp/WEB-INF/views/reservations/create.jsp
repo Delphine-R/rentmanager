@@ -36,7 +36,6 @@
                                                 <option value="${vehicle.id}">${vehicle.constructeur} ${vehicle.modele}</option>
                                             </c:forEach>
                                         </select>
-
                                     </div>
                                 </div>
                                 <div class="form-group">
