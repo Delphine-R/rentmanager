@@ -23,7 +23,6 @@ public class ReservationService {
         return instance;
     }
 
-
     public long create(Reservation reservation) throws ServiceException {
         if (reservation.getId() < 0 || reservation.getClient_id() < 0 || reservation.getVehicle_id() < 0) {
             throw new ServiceException("Error occurred in Service while creating a new reservation.");
@@ -35,6 +34,13 @@ public class ReservationService {
             throw new ServiceException("Error occurred in Service while creating a new reservation.");
         }
 
+    }
+    public void deleteById(int reservationId) throws ServiceException {
+        try {
+            reservationDao.deleteById(reservationId);
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in Service while deleting the reservation.");
+        }
     }
     public Reservation findById(int id) throws ServiceException {
         try {

@@ -86,19 +86,20 @@ public class ReservationDao {
     }
 
 
-    public int delete(Reservation reservation) throws DaoException {
+    public void deleteById(int reservationId) throws DaoException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(DELETE_RESERVATION_QUERY)) {
 
-            ps.setInt(1, reservation.getId());
+            ps.setInt(1, reservationId);
 
-            int rowsAffected = ps.executeUpdate();
+            ps.executeUpdate();
 
-            return rowsAffected;
         } catch (SQLException e) {
             throw new DaoException("Error occurred in DAO while deleting the reservation.");
         }
     }
+
+
 
     public List<Reservation> findResaByClientId(int clientId) throws DaoException {
         List<Reservation> reservations = new ArrayList<>();
