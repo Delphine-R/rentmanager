@@ -54,16 +54,14 @@ public class VehicleDao {
     }
 
 
-    public long delete(Vehicle vehicle) throws DaoException {
-        try {
-            Connection connection = ConnectionManager.getConnection();
-            PreparedStatement ps = connection.prepareStatement(DELETE_VEHICLE_QUERY);
-            ps.setLong(1, vehicle.getId());
-            int rowsAffected = ps.executeUpdate();
-            ps.close();
-            connection.close();
+    public void deleteById(int vehicleId) throws DaoException {
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(DELETE_VEHICLE_QUERY)) {
 
-            return rowsAffected;
+            ps.setInt(1, vehicleId);
+
+            ps.executeUpdate();
+
         } catch (SQLException e) {
             throw new DaoException("Error occurred in DAO while deleting the vehicle.");
         }

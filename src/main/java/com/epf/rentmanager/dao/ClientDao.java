@@ -54,20 +54,25 @@ public class ClientDao {
     }
 
 
-    public long delete(Client client) throws DaoException {
+    public void deleteById(int clientId) throws DaoException {
         try {
-            Connection connection = ConnectionManager.getConnection();
-            PreparedStatement ps = connection.prepareStatement(DELETE_CLIENT_QUERY);
-            ps.setLong(1, client.getId());
-            int rowsAffected = ps.executeUpdate();
-            ps.close();
-            connection.close();
-
-            return rowsAffected;
-        } catch (SQLException e) {
-            throw new DaoException("Error occurred in DAO while deleting the client.");
+            List<Reservation> reservations = ReservationDao.getInstance().findResaByClientId(clientId);
+            for (Reservation reservation : reservations) {
+                ReservationDao.getInstance().deleteById(reservation.getId());
+            }
+            try (Connection connection = ConnectionManager.getConnection();
+                 PreparedStatement ps = connection.prepareStatement(DELETE_CLIENT_QUERY)) {
+                ps.setInt(1, clientId);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new DaoException("Error occurred in DAO while deleting the client.");
+            }
+        } catch (DaoException e) {
+            throw new DaoException("Error occurred in DAO while deleting the client's reservations.");
         }
     }
+
+
 
     public Client findById(int id) throws DaoException {
         try {

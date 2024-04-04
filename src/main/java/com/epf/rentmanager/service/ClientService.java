@@ -37,6 +37,13 @@ public class ClientService {
         }
 
     }
+    public void deleteById(int clientId) throws ServiceException {
+        try {
+            clientDao.deleteById(clientId);
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in Service while deleting client.");
+        }
+    }
 
     public Client findById(int id) throws ServiceException {
         try {
