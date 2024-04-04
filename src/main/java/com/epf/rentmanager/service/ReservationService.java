@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.exception.*;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 
 public class ReservationService {
@@ -34,6 +35,13 @@ public class ReservationService {
             throw new ServiceException("Error occurred in Service while creating a new reservation.");
         }
 
+    }
+    public Reservation findById(int id) throws ServiceException {
+        try {
+            return reservationDao.findById(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in Service while finding the reservation by ID.");
+        }
     }
 
     public List<Reservation> findByClientId(int id) throws ServiceException {

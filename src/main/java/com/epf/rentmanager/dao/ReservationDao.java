@@ -1,13 +1,11 @@
 package com.epf.rentmanager.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.persistence.ConnectionManager;
 
@@ -27,6 +25,7 @@ public class ReservationDao {
 
     private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
     private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
+    private static final String FIND_RESERVATION_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation WHERE id=?;";
     private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
     private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
     private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
@@ -59,6 +58,33 @@ public class ReservationDao {
             throw new DaoException("Error occurred in DAO while creating a new reservation.");
         }
     }
+
+    public Reservation findById(int id) throws DaoException {
+        try {
+            Connection connection = ConnectionManager.getConnection();
+            PreparedStatement ps = connection.prepareStatement(FIND_RESERVATION_QUERY);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int clientId = rs.getInt("client_id");
+                int vehicleId = rs.getInt("vehicle_id");
+                java.sql.Date debut = rs.getDate("debut");
+                java.sql.Date fin = rs.getDate("fin");
+
+                return new Reservation(id, clientId, vehicleId, debut.toLocalDate(), fin.toLocalDate());
+            }
+
+            rs.close();
+            ps.close();
+            connection.close();
+
+            return null;
+        } catch (SQLException e) {
+            throw new DaoException("Error occurred in DAO while finding the reservation by ID.");
+        }
+    }
+
 
     public int delete(Reservation reservation) throws DaoException {
         try (Connection connection = ConnectionManager.getConnection();
