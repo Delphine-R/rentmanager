@@ -55,15 +55,20 @@ public class VehicleDao {
 
 
     public void deleteById(int vehicleId) throws DaoException {
-        try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(DELETE_VEHICLE_QUERY)) {
-
-            ps.setInt(1, vehicleId);
-
-            ps.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new DaoException("Error occurred in DAO while deleting the vehicle.");
+        try {
+            List<Reservation> reservations = ReservationDao.getInstance().findResaByVehicleId(vehicleId);
+            for (Reservation reservation : reservations) {
+                ReservationDao.getInstance().deleteById(reservation.getId());
+            }
+            try (Connection connection = ConnectionManager.getConnection();
+                 PreparedStatement ps = connection.prepareStatement(DELETE_VEHICLE_QUERY)) {
+                ps.setInt(1, vehicleId);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new DaoException("Error occurred in DAO while deleting the vehicle.");
+            }
+        } catch (DaoException e) {
+            throw new DaoException("Error occurred in DAO while deleting the vehicle's reservations.");
         }
     }
 

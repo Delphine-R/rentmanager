@@ -35,6 +35,14 @@ public class VehicleService {
         }
     }
 
+    public void deleteById(int vehicleId) throws ServiceException {
+        try {
+            vehicleDao.deleteById(vehicleId);
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in Service while deleting vehicle.");
+        }
+    }
+
     public Vehicle findById(int id) throws ServiceException {
         try {
             return vehicleDao.findById(id);
