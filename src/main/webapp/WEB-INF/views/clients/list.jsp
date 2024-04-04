@@ -45,7 +45,7 @@
                                             <a class="btn btn-primary" href="${pageContext.request.contextPath}/clients/details?id=${client.id}">
                                                 <i class="fa fa-play"></i>
                                             </a>
-                                            <a class="btn btn-success disabled" href="#">
+                                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/clients/update?id=${client.id}">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <a class="btn btn-primary" href="${pageContext.request.contextPath}/clients/delete?id=${client.id}">

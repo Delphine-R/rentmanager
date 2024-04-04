@@ -27,6 +27,22 @@ public class ClientDao {
     private static final String FIND_CLIENT_QUERY = "SELECT nom, prenom, email, naissance FROM Client WHERE id=?;";
     private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
     private static final String COUNT_CLIENTS_QUERY = "SELECT COUNT(id) AS count FROM Client;";
+    private static final String UPDATE_CLIENTS_QUERY = "UPDATE Client SET nom = ?, prenom = ?, email = ?, naissance = ? WHERE id = ?;";
+
+    public void update(Client client) throws DaoException {
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_CLIENTS_QUERY)) {
+            ps.setString(1, client.getNom());
+            ps.setString(2, client.getPrenom());
+            ps.setString(3, client.getEmail());
+            ps.setDate(4, Date.valueOf(client.getNaissance()));
+            ps.setInt(5, client.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Error occurred in DAO while updating the client.");
+        }
+    }
+
     public long create(Client client) throws DaoException {
         try {
             Connection connection = ConnectionManager.getConnection();

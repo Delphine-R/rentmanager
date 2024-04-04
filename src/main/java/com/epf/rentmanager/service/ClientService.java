@@ -22,6 +22,13 @@ public class ClientService {
         return instance;
     }
 
+    public void update(Client client) throws ServiceException {
+        try {
+            clientDao.update(client);
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in Service while updating client.");
+        }
+    }
 
     public long create(Client client) throws ServiceException {
         if (client.getNom().isEmpty() || client.getPrenom().isEmpty()) {

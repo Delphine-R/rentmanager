@@ -27,6 +27,7 @@ public class VehicleDao {
     private static final String FIND_VEHICLE_QUERY = "SELECT constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
     private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
     private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(id) AS count FROM Vehicle;";
+    private static final String UPDATE_VEHICLES_QUERY = "UPDATE Vehicule SET constructeur = ?, modele = ?, nb_places = ? WHERE id = ?;";
 
     public long create(Vehicle vehicle) throws DaoException {
         try {
