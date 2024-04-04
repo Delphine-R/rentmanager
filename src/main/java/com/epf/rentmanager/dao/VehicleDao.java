@@ -27,7 +27,20 @@ public class VehicleDao {
     private static final String FIND_VEHICLE_QUERY = "SELECT constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
     private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
     private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(id) AS count FROM Vehicle;";
-    private static final String UPDATE_VEHICLES_QUERY = "UPDATE Vehicule SET constructeur = ?, modele = ?, nb_places = ? WHERE id = ?;";
+    private static final String UPDATE_VEHICLES_QUERY = "UPDATE Vehicle SET constructeur = ?, modele = ?, nb_places = ? WHERE id = ?;";
+
+    public void update(Vehicle vehicle) throws DaoException {
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_VEHICLES_QUERY)) {
+            ps.setString(1, vehicle.getConstructeur());
+            ps.setString(2, vehicle.getModele());
+            ps.setInt(3, vehicle.getNb_places());
+            ps.setInt(4, vehicle.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Error occurred in DAO while updating the vehicle.");
+        }
+    }
 
     public long create(Vehicle vehicle) throws DaoException {
         try {

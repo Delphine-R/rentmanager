@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.epf.rentmanager.exception.*;
 import com.epf.rentmanager.model.Vehicle;
+import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.dao.VehicleDao;
 
 public class VehicleService {
@@ -22,6 +23,13 @@ public class VehicleService {
         return instance;
     }
 
+    public void update(Vehicle vehicle) throws ServiceException {
+        try {
+            vehicleDao.update(vehicle);
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in Service while updating vehicle.");
+        }
+    }
 
     public long create(Vehicle vehicle) throws ServiceException {
         if (vehicle.getConstructeur().isEmpty() || vehicle.getNb_places() < 0) {
