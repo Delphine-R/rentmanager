@@ -45,7 +45,7 @@
                                             <a class="btn btn-primary" href="${pageContext.request.contextPath}/reservations/details?id=${reservation.id}">
                                                 <i class="fa fa-play"></i>
                                             </a>
-                                            <a class="btn btn-success disabled" href="#">
+                                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/reservations/update?id=${reservation.id}">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <a class="btn btn-primary" href="${pageContext.request.contextPath}/reservations/delete?id=${reservation.id}">

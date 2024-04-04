@@ -30,14 +30,28 @@ public class ReservationDao {
     private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
     private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
     private static final String COUNT_RESERVATIONS_QUERY = "SELECT COUNT(id) AS count FROM Reservation;";
+    private static final String UPDATE_RESERVATIONS_QUERY = "UPDATE Reservation SET client_id = ?, vehicle_id = ?, debut = ?, fin = ? WHERE id = ?;";
+    public void update(Reservation reservation) throws DaoException {
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_RESERVATIONS_QUERY)) {
+            ps.setInt(1, reservation.getClient_id());
+            ps.setInt(2, reservation.getVehicle_id());
+            ps.setDate(3, java.sql.Date.valueOf(reservation.getDebut()));
+            ps.setDate(4, java.sql.Date.valueOf(reservation.getFin()));
+            ps.setInt(5, reservation.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Error occurred in DAO while updating the reservation.");
+        }
+    }
     public int create(Reservation reservation) throws DaoException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(CREATE_RESERVATION_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, reservation.getClient_id());
             ps.setInt(2, reservation.getVehicle_id());
-            ps.setDate(3, java.sql.Date.valueOf(reservation.getDebut()));
-            ps.setDate(4, java.sql.Date.valueOf(reservation.getFin()));
+            ps.setDate(3, Date.valueOf(reservation.getDebut()));
+            ps.setDate(4, Date.valueOf(reservation.getFin()));
 
             int rowsAffected = ps.executeUpdate();
 

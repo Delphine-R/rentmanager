@@ -23,6 +23,14 @@ public class ReservationService {
         return instance;
     }
 
+    public void update(Reservation reservation) throws ServiceException {
+        try {
+            reservationDao.update(reservation);
+        } catch (DaoException e) {
+            throw new ServiceException("Error occurred in Service while updating reservation.");
+        }
+    }
+
     public long create(Reservation reservation) throws ServiceException {
         if (reservation.getId() < 0 || reservation.getClient_id() < 0 || reservation.getVehicle_id() < 0) {
             throw new ServiceException("Error occurred in Service while creating a new reservation.");

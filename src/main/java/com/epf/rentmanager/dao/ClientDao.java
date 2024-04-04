@@ -43,7 +43,7 @@ public class ClientDao {
         }
     }
 
-    public long create(Client client) throws DaoException {
+    public int create(Client client) throws DaoException {
         try {
             Connection connection = ConnectionManager.getConnection();
             Statement statement = connection.createStatement();
