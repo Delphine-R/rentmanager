@@ -1,22 +1,18 @@
 package com.epf.rentmanager.dao;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.epf.rentmanager.exception.DaoException;
-import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.persistence.ConnectionManager;
 import org.springframework.stereotype.Repository;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class ReservationDao {
 
     //private static ReservationDao instance = null;
-
-    private ReservationDao() {
-    }
 
     private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
     private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
@@ -26,6 +22,29 @@ public class ReservationDao {
     private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
     private static final String COUNT_RESERVATIONS_QUERY = "SELECT COUNT(id) AS count FROM Reservation;";
     private static final String UPDATE_RESERVATIONS_QUERY = "UPDATE Reservation SET client_id = ?, vehicle_id = ?, debut = ?, fin = ? WHERE id = ?;";
+
+    private ReservationDao() {}
+
+    public static int count() throws DaoException {
+        int count = 0;
+        try {
+            Connection connection = ConnectionManager.getConnection();
+            PreparedStatement ps = connection.prepareStatement(COUNT_RESERVATIONS_QUERY);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt("count");
+            }
+
+            rs.close();
+            ps.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new DaoException("Error occurred in DAO while counting reservations.");
+        }
+        return count;
+    }
+
     public void update(Reservation reservation) throws DaoException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(UPDATE_RESERVATIONS_QUERY)) {
@@ -39,6 +58,7 @@ public class ReservationDao {
             throw new DaoException("Error occurred in DAO while updating the reservation.");
         }
     }
+
     public int create(Reservation reservation) throws DaoException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(CREATE_RESERVATION_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -94,7 +114,6 @@ public class ReservationDao {
         }
     }
 
-
     public void deleteById(int reservationId) throws DaoException {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(DELETE_RESERVATION_QUERY)) {
@@ -107,8 +126,6 @@ public class ReservationDao {
             throw new DaoException("Error occurred in DAO while deleting the reservation.");
         }
     }
-
-
 
     public List<Reservation> findResaByClientId(int clientId) throws DaoException {
         List<Reservation> reservations = new ArrayList<>();
@@ -181,25 +198,5 @@ public class ReservationDao {
         }
 
         return reservations;
-    }
-    public static int count() throws DaoException {
-        int count = 0;
-        try {
-            Connection connection = ConnectionManager.getConnection();
-            PreparedStatement ps = connection.prepareStatement(COUNT_RESERVATIONS_QUERY);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                count = rs.getInt("count");
-            }
-
-            rs.close();
-            ps.close();
-            connection.close();
-        } catch (SQLException e) {
-            throw new DaoException("Error occurred in DAO while counting reservations.");
-        }
-
-        return count;
     }
 }

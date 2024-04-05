@@ -41,6 +41,8 @@ public class UpdateReservationServlet extends HttpServlet {
             int reservationId = Integer.parseInt(request.getParameter("id"));
             Reservation reservation = reservationService.findById(reservationId);
             request.setAttribute("reservation", reservation);
+            request.setAttribute("debut", reservation.getDebut().format(formatter));
+            request.setAttribute("fin", reservation.getFin().format(formatter));
             request.getRequestDispatcher("/WEB-INF/views/reservations/update.jsp").forward(request, response);
         } catch (NumberFormatException | ServiceException e) {
 

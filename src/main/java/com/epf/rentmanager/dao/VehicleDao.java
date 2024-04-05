@@ -1,28 +1,19 @@
 package com.epf.rentmanager.dao;
 
+import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.model.Reservation;
+import com.epf.rentmanager.model.Vehicle;
+import com.epf.rentmanager.persistence.ConnectionManager;
+import org.springframework.stereotype.Repository;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
-import com.epf.rentmanager.exception.DaoException;
-import com.epf.rentmanager.model.*;
-import com.epf.rentmanager.persistence.ConnectionManager;
-import com.epf.rentmanager.dao.ReservationDao;
 
 @Repository
 public class VehicleDao {
 
     //private static VehicleDao instance = null;
-
-    private final ConnectionManager connectionManager;
-    private final ReservationDao reservationDao;
-
-    public VehicleDao(ConnectionManager connectionManager, ReservationDao reservationDao) {
-        this.connectionManager = connectionManager;
-        this.reservationDao = reservationDao;
-    }
 
     private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES(?, ?, ?);";
     private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
@@ -30,9 +21,15 @@ public class VehicleDao {
     private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
     private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(id) AS count FROM Vehicle;";
     private static final String UPDATE_VEHICLES_QUERY = "UPDATE Vehicle SET constructeur = ?, modele = ?, nb_places = ? WHERE id = ?;";
+    private final ConnectionManager connectionManager;
+    private final ReservationDao reservationDao;
+    public VehicleDao(ConnectionManager connectionManager, ReservationDao reservationDao) {
+        this.connectionManager = connectionManager;
+        this.reservationDao = reservationDao;
+    }
 
     public void update(Vehicle vehicle) throws DaoException {
-        try (Connection connection = connectionManager.getConnection();
+        try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(UPDATE_VEHICLES_QUERY)) {
             ps.setString(1, vehicle.getConstructeur());
             ps.setString(2, vehicle.getModele());
@@ -46,7 +43,7 @@ public class VehicleDao {
 
     public long create(Vehicle vehicle) throws DaoException {
         try {
-            Connection connection = connectionManager.getConnection();
+            Connection connection = ConnectionManager.getConnection();
             Statement statement = connection.createStatement();
             PreparedStatement ps = connection.prepareStatement(CREATE_VEHICLE_QUERY, statement.RETURN_GENERATED_KEYS);
             ps.setString(1, vehicle.getConstructeur());
@@ -76,7 +73,7 @@ public class VehicleDao {
             for (Reservation reservation : reservations) {
                 reservationDao.deleteById(reservation.getId());
             }
-            try (Connection connection = connectionManager.getConnection();
+            try (Connection connection = ConnectionManager.getConnection();
                  PreparedStatement ps = connection.prepareStatement(DELETE_VEHICLE_QUERY)) {
                 ps.setInt(1, vehicleId);
                 ps.executeUpdate();
@@ -90,7 +87,7 @@ public class VehicleDao {
 
     public Vehicle findById(int id) throws DaoException {
         try {
-            Connection connection = connectionManager.getConnection();
+            Connection connection = ConnectionManager.getConnection();
             PreparedStatement ps = connection.prepareStatement(FIND_VEHICLE_QUERY);
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
@@ -115,7 +112,7 @@ public class VehicleDao {
     public List<Vehicle> findAll() throws DaoException {
         List<Vehicle> vehicles = new ArrayList<>();
         try {
-            Connection connection = connectionManager.getConnection();
+            Connection connection = ConnectionManager.getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(FIND_VEHICLES_QUERY);
 
@@ -141,7 +138,7 @@ public class VehicleDao {
     public int count() throws DaoException {
         int count = 0;
         try {
-            Connection connection = connectionManager.getConnection();
+            Connection connection = ConnectionManager.getConnection();
             PreparedStatement ps = connection.prepareStatement(COUNT_VEHICLES_QUERY);
             ResultSet rs = ps.executeQuery();
 

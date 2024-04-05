@@ -49,7 +49,7 @@
                                 <div class="form-group">
                                     <label for="naissance" class="col-sm-2 control-label">Naissance</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="naissance" name="naissance" value="${client.naissance}" required
+                                        <input type="text" class="form-control" id="naissance" name="naissance" value="${naissance}" required
                                                data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                                     </div>
                                 </div>

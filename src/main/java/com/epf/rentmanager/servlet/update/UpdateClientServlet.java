@@ -46,6 +46,8 @@ public class UpdateClientServlet extends HttpServlet {
 
             // Set the client object as an attribute in the request
             request.setAttribute("client", client);
+            request.setAttribute("naissance", client.getNaissance().format(formatter));
+
 
             // Forward the request to the update page
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/clients/update.jsp").forward(request, response);

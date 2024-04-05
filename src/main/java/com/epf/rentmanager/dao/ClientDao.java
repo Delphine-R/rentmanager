@@ -1,25 +1,19 @@
 package com.epf.rentmanager.dao;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.epf.rentmanager.exception.DaoException;
-import com.epf.rentmanager.model.*;
+import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.persistence.ConnectionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository
 public class ClientDao {
 
-    //private static ClientDao instance = null;
-
-    @Autowired
-    ReservationDao reservationDao;
-
-    private ClientDao() {
-    }
 
     private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
     private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
@@ -28,66 +22,10 @@ public class ClientDao {
     private static final String COUNT_CLIENTS_QUERY = "SELECT COUNT(id) AS count FROM Client;";
     private static final String UPDATE_CLIENTS_QUERY = "UPDATE Client SET nom = ?, prenom = ?, email = ?, naissance = ? WHERE id = ?;";
 
-    public void update(Client client) throws DaoException {
-        try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(UPDATE_CLIENTS_QUERY)) {
-            ps.setString(1, client.getNom());
-            ps.setString(2, client.getPrenom());
-            ps.setString(3, client.getEmail());
-            ps.setDate(4, Date.valueOf(client.getNaissance()));
-            ps.setInt(5, client.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException("Error occurred in DAO while updating the client.");
-        }
+    @Autowired
+    ReservationDao reservationDao;
+    private ClientDao() {
     }
-
-    public int create(Client client) throws DaoException {
-        try {
-            Connection connection = ConnectionManager.getConnection();
-            Statement statement = connection.createStatement();
-            PreparedStatement ps = connection.prepareStatement(CREATE_CLIENT_QUERY, statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, client.getNom());
-            ps.setString(2, client.getPrenom());
-            ps.setString(3, client.getEmail());
-            ps.setDate(4, Date.valueOf(client.getNaissance()));
-            ps.execute();
-
-            ResultSet resultSet = ps.getGeneratedKeys();
-
-            if (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                client.setId(id);
-                return client.getId();
-            }
-            ps.close();
-            connection.close();
-        } catch (SQLException e) {
-            throw new DaoException("Error occurred in DAO while creating a new client.");
-        }
-        return client.getId();
-    }
-
-
-    public void deleteById(int clientId) throws DaoException {
-        try {
-            List<Reservation> reservations = reservationDao.findResaByClientId(clientId);
-            for (Reservation reservation : reservations) {
-                reservationDao.deleteById(reservation.getId());
-            }
-            try (Connection connection = ConnectionManager.getConnection();
-                 PreparedStatement ps = connection.prepareStatement(DELETE_CLIENT_QUERY)) {
-                ps.setInt(1, clientId);
-                ps.executeUpdate();
-            } catch (SQLException e) {
-                throw new DaoException("Error occurred in DAO while deleting the client.");
-            }
-        } catch (DaoException e) {
-            throw new DaoException("Error occurred in DAO while deleting the client's reservations.");
-        }
-    }
-
-
 
     public Client findById(int id) throws DaoException {
         try {
@@ -160,6 +98,64 @@ public class ClientDao {
         }
 
         return count;
+    }
+
+    public int create(Client client) throws DaoException {
+        try {
+            Connection connection = ConnectionManager.getConnection();
+            Statement statement = connection.createStatement();
+            PreparedStatement ps = connection.prepareStatement(CREATE_CLIENT_QUERY, statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, client.getNom());
+            ps.setString(2, client.getPrenom());
+            ps.setString(3, client.getEmail());
+            ps.setDate(4, Date.valueOf(client.getNaissance()));
+            ps.execute();
+
+            ResultSet resultSet = ps.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                client.setId(id);
+                return client.getId();
+            }
+            ps.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new DaoException("Error occurred in DAO while creating a new client.");
+        }
+        return client.getId();
+    }
+
+    public void update(Client client) throws DaoException {
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_CLIENTS_QUERY)) {
+            ps.setString(1, client.getNom());
+            ps.setString(2, client.getPrenom());
+            ps.setString(3, client.getEmail());
+            ps.setDate(4, Date.valueOf(client.getNaissance()));
+            ps.setInt(5, client.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Error occurred in DAO while updating the client.");
+        }
+    }
+
+    public void deleteById(int clientId) throws DaoException {
+        try {
+            List<Reservation> reservations = reservationDao.findResaByClientId(clientId);
+            for (Reservation reservation : reservations) {
+                reservationDao.deleteById(reservation.getId());
+            }
+            try (Connection connection = ConnectionManager.getConnection();
+                 PreparedStatement ps = connection.prepareStatement(DELETE_CLIENT_QUERY)) {
+                ps.setInt(1, clientId);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new DaoException("Error occurred in DAO while deleting the client.");
+            }
+        } catch (DaoException e) {
+            throw new DaoException("Error occurred in DAO while deleting the client's reservations.");
+        }
     }
 
 }

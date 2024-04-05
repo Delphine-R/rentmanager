@@ -43,14 +43,14 @@
                                 <div class="form-group">
                                     <label for="debut" class="col-sm-2 control-label">Debut</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="debut" name="debut" value="${reservation.debut}" required
+                                        <input type="text" class="form-control" id="debut" name="debut" value="${debut}" required
                                                data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="fin" class="col-sm-2 control-label">Fin</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="fin" name="fin" value="${reservation.fin}" required
+                                        <input type="text" class="form-control" id="fin" name="fin" value="${fin}" required
                                                data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                                     </div>
                                 </div>
