@@ -3,17 +3,24 @@ package com.epf.rentmanager.ui.cli;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.utils.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CLIClient {
 
-    private ClientService clientService;
+    private final ClientService clientService;
 
-    public CLIClient() {
-        this.clientService = ClientService.getInstance();
+    @Autowired
+    public CLIClient(ClientService clientService) {
+        this.clientService = clientService;
     }
 
     public void createClient() {
@@ -55,7 +62,9 @@ public class CLIClient {
     }
 
     public static void main(String[] args) {
-        CLIClient cliClient = new CLIClient();
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        CLIClient cliClient = context.getBean(CLIClient.class);
+
         boolean running = true;
         while (running) {
             IOUtils.print("1. Créer un client");

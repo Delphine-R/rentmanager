@@ -7,6 +7,8 @@ import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,18 +23,29 @@ import java.util.List;
 @WebServlet("/reservations/create")
 public class ReservationCreateServlet extends HttpServlet {
 
+    @Autowired
+    VehicleService vehicleService;
+    @Autowired
+    ClientService clientService;
+    @Autowired
+    ReservationService reservationService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
+
     private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Vehicle> vehicles = null;
         List<Client> clients = null;
         try {
-            vehicles = VehicleService.getInstance().findAll();
-            clients = ClientService.getInstance().findAll();
+            vehicles = vehicleService.findAll();
+            clients = clientService.findAll();
         } catch (ServiceException e) {
         }
 
@@ -59,7 +72,7 @@ public class ReservationCreateServlet extends HttpServlet {
         reservation.setFin(fin);
 
         try {
-            ReservationService.getInstance().create(reservation);
+            reservationService.create(reservation);
             response.sendRedirect(request.getContextPath() + "/reservations/list");
         } catch (ServiceException e) {
         }

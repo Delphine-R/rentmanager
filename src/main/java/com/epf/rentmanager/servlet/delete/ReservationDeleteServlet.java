@@ -1,7 +1,11 @@
 package com.epf.rentmanager.servlet.delete;
 
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.ReservationService;
+import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +16,15 @@ import java.io.IOException;
 
 @WebServlet("/reservations/delete")
 public class ReservationDeleteServlet extends HttpServlet {
+
+    @Autowired
+    ReservationService reservationService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +39,7 @@ public class ReservationDeleteServlet extends HttpServlet {
 
         try {
             int reservationId = Integer.parseInt(reservationIdStr);
-            ReservationService.getInstance().deleteById(reservationId);
+            reservationService.deleteById(reservationId);
             // Redirect to the list page after successful deletion
             response.sendRedirect(request.getContextPath() + "/reservations/list");
         } catch (NumberFormatException | ServiceException e) {

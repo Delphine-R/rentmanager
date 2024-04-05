@@ -2,17 +2,25 @@ package com.epf.rentmanager.ui.cli;
 
 import java.util.List;
 
+import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicle;
-import com.epf.rentmanager.utils.IOUtils;
 import com.epf.rentmanager.service.VehicleService;
+import com.epf.rentmanager.utils.IOUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+
+@Component
 public class CLIVehicle {
 
     private VehicleService vehicleService;
 
-    public CLIVehicle() {
-        this.vehicleService = VehicleService.getInstance();
+    @Autowired
+    public CLIVehicle(VehicleService vehicleService) {
+        this.vehicleService = vehicleService;
     }
 
     public void createVehicle() {
@@ -51,7 +59,9 @@ public class CLIVehicle {
     }
 
     public static void main(String[] args) {
-        CLIVehicle cliVehicle = new CLIVehicle();
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        CLIVehicle cliVehicle = context.getBean(CLIVehicle.class);
+
         boolean running = true;
         while (running) {
             IOUtils.print("1. Créer un vehicule");
@@ -77,4 +87,3 @@ public class CLIVehicle {
     }
 
 }
-

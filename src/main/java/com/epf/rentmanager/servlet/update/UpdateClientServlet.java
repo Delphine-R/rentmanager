@@ -3,6 +3,10 @@ package com.epf.rentmanager.servlet.update;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.service.ReservationService;
+import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +20,18 @@ import java.time.format.DateTimeFormatter;
 @WebServlet("/clients/update")
 public class UpdateClientServlet extends HttpServlet {
 
+    @Autowired
+    VehicleService vehicleService;
+    @Autowired
+    ClientService clientService;
+    @Autowired
+    ReservationService reservationService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
     private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -26,7 +42,7 @@ public class UpdateClientServlet extends HttpServlet {
 
         try {
             // Retrieve the client's information from the database based on the ID
-            Client client = ClientService.getInstance().findById(clientId);
+            Client client = clientService.findById(clientId);
 
             // Set the client object as an attribute in the request
             request.setAttribute("client", client);
@@ -54,7 +70,7 @@ public class UpdateClientServlet extends HttpServlet {
 
         // Update the client
         try {
-            ClientService.getInstance().update(client);
+            clientService.update(client);
             // Redirect to the list page after updating the client
             response.sendRedirect(request.getContextPath() + "/clients/list");
         } catch (ServiceException e) {

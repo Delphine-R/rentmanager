@@ -7,6 +7,8 @@ import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +21,18 @@ import java.util.List;
 
 @WebServlet("/reservations/details")
 public class ReservationDetailsServlet extends HttpServlet {
+    @Autowired
+    VehicleService vehicleService;
+    @Autowired
+    ClientService clientService;
+    @Autowired
+    ReservationService reservationService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -28,16 +42,16 @@ public class ReservationDetailsServlet extends HttpServlet {
 
         try {
             int reservationId = Integer.parseInt(reservationIdStr);
-            Reservation reservation = ReservationService.getInstance().findById(reservationId);
+            Reservation reservation = reservationService.findById(reservationId);
 
             // Get client details for the reservation
             int clientId = reservation.getClient_id();
-            Client client = ClientService.getInstance().findById(clientId);
+            Client client = clientService.findById(clientId);
 
             // Get vehicles linked to the reservation
             List<Vehicle> vehicles = new ArrayList<>();
             int vehicleId = reservation.getVehicle_id();
-            Vehicle vehicle = VehicleService.getInstance().findById(vehicleId);
+            Vehicle vehicle = vehicleService.findById(vehicleId);
             vehicles.add(vehicle);
 
             request.setAttribute("reservation", reservation);

@@ -5,22 +5,14 @@ import java.util.List;
 import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.exception.*;
 import com.epf.rentmanager.model.Client;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ClientService {
 
+    @Autowired
     private ClientDao clientDao;
-    public static ClientService instance;
-
-    private ClientService() {
-        this.clientDao = ClientDao.getInstance();
-    }
-
-    public static ClientService getInstance() {
-        if (instance == null) {
-            instance = new ClientService();
-        }
-        return instance;
-    }
 
     public void update(Client client) throws ServiceException {
         try {
@@ -44,6 +36,7 @@ public class ClientService {
         }
 
     }
+
     public void deleteById(int clientId) throws ServiceException {
         try {
             clientDao.deleteById(clientId);
@@ -75,5 +68,4 @@ public class ClientService {
             throw new ServiceException("Error occurred in DAO while counting clients.");
         }
     }
-
 }

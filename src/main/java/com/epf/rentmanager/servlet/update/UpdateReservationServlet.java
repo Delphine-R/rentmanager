@@ -2,7 +2,11 @@ package com.epf.rentmanager.servlet.update;
 
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Reservation;
+import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.ReservationService;
+import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +19,18 @@ import java.time.format.DateTimeFormatter;
 
 @WebServlet("/reservations/update")
 public class UpdateReservationServlet extends HttpServlet {
+    @Autowired
+    VehicleService vehicleService;
+    @Autowired
+    ClientService clientService;
+    @Autowired
+    ReservationService reservationService;
 
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
     private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -24,7 +39,7 @@ public class UpdateReservationServlet extends HttpServlet {
 
         try {
             int reservationId = Integer.parseInt(request.getParameter("id"));
-            Reservation reservation = ReservationService.getInstance().findById(reservationId);
+            Reservation reservation = reservationService.findById(reservationId);
             request.setAttribute("reservation", reservation);
             request.getRequestDispatcher("/WEB-INF/views/reservations/update.jsp").forward(request, response);
         } catch (NumberFormatException | ServiceException e) {
@@ -44,7 +59,7 @@ public class UpdateReservationServlet extends HttpServlet {
 
             Reservation reservation = new Reservation(reservationId, clientId, vehicleId, debut, fin);
 
-            ReservationService.getInstance().update(reservation);
+            reservationService.update(reservation);
             response.sendRedirect(request.getContextPath() + "/reservations/list");
 
         } catch (NumberFormatException | ServiceException e) {

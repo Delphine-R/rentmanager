@@ -2,7 +2,11 @@ package com.epf.rentmanager.servlet.create;
 
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicle;
+import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +17,15 @@ import java.io.IOException;
 
 @WebServlet("/vehicles/create")
 public class VehicleCreateServlet extends HttpServlet {
+
+    @Autowired
+    VehicleService vehicleService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +50,7 @@ public class VehicleCreateServlet extends HttpServlet {
 
         // Save the new vehicle
         try {
-            VehicleService.getInstance().create(vehicle);
+            vehicleService.create(vehicle);
             // Redirect to the list page after adding the vehicle
             response.sendRedirect(request.getContextPath() + "/vehicles/list");
         } catch (ServiceException e) {

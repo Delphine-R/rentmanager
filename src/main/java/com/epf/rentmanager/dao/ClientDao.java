@@ -7,19 +7,18 @@ import java.util.List;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.*;
 import com.epf.rentmanager.persistence.ConnectionManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ClientDao {
 
-    private static ClientDao instance = null;
+    //private static ClientDao instance = null;
+
+    @Autowired
+    ReservationDao reservationDao;
 
     private ClientDao() {
-    }
-
-    public static ClientDao getInstance() {
-        if (instance == null) {
-            instance = new ClientDao();
-        }
-        return instance;
     }
 
     private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
@@ -72,9 +71,9 @@ public class ClientDao {
 
     public void deleteById(int clientId) throws DaoException {
         try {
-            List<Reservation> reservations = ReservationDao.getInstance().findResaByClientId(clientId);
+            List<Reservation> reservations = reservationDao.findResaByClientId(clientId);
             for (Reservation reservation : reservations) {
-                ReservationDao.getInstance().deleteById(reservation.getId());
+                reservationDao.deleteById(reservation.getId());
             }
             try (Connection connection = ConnectionManager.getConnection();
                  PreparedStatement ps = connection.prepareStatement(DELETE_CLIENT_QUERY)) {

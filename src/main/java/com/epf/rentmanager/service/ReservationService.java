@@ -4,24 +4,15 @@ import java.util.List;
 
 import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.exception.*;
-import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ReservationService {
 
+    @Autowired
     private ReservationDao reservationDao;
-    public static ReservationService instance;
-
-    private ReservationService() {
-        this.reservationDao = ReservationDao.getInstance();
-    }
-
-    public static ReservationService getInstance() {
-        if (instance == null) {
-            instance = new ReservationService();
-        }
-        return instance;
-    }
 
     public void update(Reservation reservation) throws ServiceException {
         try {
@@ -43,6 +34,7 @@ public class ReservationService {
         }
 
     }
+
     public void deleteById(int reservationId) throws ServiceException {
         try {
             reservationDao.deleteById(reservationId);
@@ -50,6 +42,7 @@ public class ReservationService {
             throw new ServiceException("Error occurred in Service while deleting the reservation.");
         }
     }
+
     public Reservation findById(int id) throws ServiceException {
         try {
             return reservationDao.findById(id);

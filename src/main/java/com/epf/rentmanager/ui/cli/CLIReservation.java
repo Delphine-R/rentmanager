@@ -3,18 +3,25 @@ package com.epf.rentmanager.ui.cli;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
-import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.utils.IOUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+
+@Component
 public class CLIReservation {
 
     private ReservationService reservationService;
 
-    public CLIReservation() {
-        this.reservationService = ReservationService.getInstance();
+    @Autowired
+    public CLIReservation(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
     public void createReservation() {
@@ -91,7 +98,9 @@ public class CLIReservation {
     }
 
     public static void main(String[] args) {
-        CLIReservation cliReservation = new CLIReservation();
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        CLIReservation cliReservation = context.getBean(CLIReservation.class);
+
         boolean running = true;
         while (running) {
             IOUtils.print("1. Créer une réservation");
