@@ -39,6 +39,7 @@
 
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prenom">
+                                        <div id="nomPrenomErrorMessage" class="text-danger"></div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -105,5 +106,29 @@
     });
 </script>
 
+<script>
+    $(function () {
+        $('[data-mask]').inputmask();
+
+        function validerNomPrenom() {
+            var nom = $('#nom').val().trim();
+            var prenom = $('#prenom').val().trim();
+
+            if (nom.length < 3 || prenom.length < 3) {
+                $('#nomPrenomErrorMessage').text('Le nom et le prenom doivent avoir minimum 3 lettres.');
+                return false;
+            }
+
+            $('#nomPrenomErrorMessage').text('');
+            return true;
+        }
+
+        $('form').submit(function (event) {
+            if (!validerNomPrenom()) event.preventDefault();
+        });
+
+        $('#nom, #prenom').change(validerNomPrenom);
+    });
+</script>
 </body>
 </html>
