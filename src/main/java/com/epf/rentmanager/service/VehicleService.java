@@ -14,6 +14,11 @@ public class VehicleService {
     @Autowired
     private VehicleDao vehicleDao;
 
+    @Autowired
+    public VehicleService(VehicleDao vehicleDao) {
+        this.vehicleDao = vehicleDao;
+    }
+
     public void update(Vehicle vehicle) throws ServiceException {
         try {
             vehicleDao.update(vehicle);
