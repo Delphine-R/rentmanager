@@ -50,10 +50,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="naissance" class="col-sm-2 control-label">Naissance</label>
-
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="naissance" name="naissance" required
                                                data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                        <div id="ageErrorMessage" class="text-danger"></div>
                                     </div>
                                 </div>
                             </div>
@@ -80,10 +80,30 @@
 <script src="${pageContext.request.contextPath}/resources/plugins/input-mask/jquery.inputmask.js"></script>
 <script src="${pageContext.request.contextPath}/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="${pageContext.request.contextPath}/resources/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
 <script>
     $(function () {
         $('[data-mask]').inputmask();
+
+        function calculerAge(birthdate) {
+            var age = new Date().getFullYear() - new Date(birthdate).getFullYear();
+            return (new Date().getMonth() < new Date(birthdate).getMonth() || (new Date().getMonth() === new Date(birthdate).getMonth() && new Date().getDate() < new Date(birthdate).getDate())) ? age - 1 : age;
+        }
+
+        function validerNaissance() {
+            var minimumAge = 18;
+            var age = calculerAge($('#naissance').val());
+            $('#ageErrorMessage').text(age < minimumAge ? 'Le client doit avoir minimum 18 ans' : '');
+            return age >= minimumAge;
+        }
+
+        $('form').submit(function (event) {
+            if (!validerNaissance()) event.preventDefault();
+        });
+
+        $('#naissance').change(validerNaissance);
     });
 </script>
+
 </body>
 </html>

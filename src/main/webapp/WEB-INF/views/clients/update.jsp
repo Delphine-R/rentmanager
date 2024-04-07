@@ -4,27 +4,18 @@
 <%@include file="/WEB-INF/views/common/head.jsp"%>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
     <%@ include file="/WEB-INF/views/common/header.jsp" %>
-    <!-- Left side column. contains the logo and sidebar -->
     <%@ include file="/WEB-INF/views/common/sidebar.jsp" %>
-
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
                 Utilisateurs
             </h1>
         </section>
-
-        <!-- Main content -->
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <!-- Horizontal Form -->
                     <div class="box">
-                        <!-- form start -->
                         <form class="form-horizontal" method="post" action="${pageContext.request.contextPath}/clients/update">
                             <input type="hidden" name="id" value="${client.id}">
                             <div class="box-body">
@@ -53,26 +44,23 @@
                                                data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div id="ageErrorMessage" class="text-danger"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- /.box-body -->
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-info pull-right">Modifier</button>
                             </div>
-                            <!-- /.box-footer -->
                         </form>
                     </div>
-                    <!-- /.box -->
                 </div>
-                <!-- /.col -->
             </div>
         </section>
-        <!-- /.content -->
     </div>
-
     <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </div>
-<!-- ./wrapper -->
-
 <%@ include file="/WEB-INF/views/common/js_imports.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/plugins/input-mask/jquery.inputmask.js"></script>
 <script src="${pageContext.request.contextPath}/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
@@ -80,6 +68,20 @@
 <script>
     $(function () {
         $('[data-mask]').inputmask();
+        function calculerAge(birthdate) {
+            var age = new Date().getFullYear() - new Date(birthdate).getFullYear();
+            return (new Date().getMonth() < new Date(birthdate).getMonth() || (new Date().getMonth() === new Date(birthdate).getMonth() && new Date().getDate() < new Date(birthdate).getDate())) ? age - 1 : age;
+        }
+        function validerNaissance() {
+            var minimumAge = 18;
+            var age = calculerAge($('#naissance').val());
+            $('#ageErrorMessage').text(age < minimumAge ? 'Le client doit avoir minimum 18 ans' : '');
+            return age >= minimumAge;
+        }
+        $('form').submit(function (event) {
+            if (!validerNaissance()) event.preventDefault();
+        });
+        $('#naissance').change(validerNaissance);
     });
 </script>
 </body>
